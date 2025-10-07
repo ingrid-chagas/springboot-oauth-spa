@@ -1,0 +1,30 @@
+server:
+  port: 8000
+spring:
+    application:
+        name: gateway
+
+    security:
+        oauth2:
+            client:
+                registration:
+                    keycloak:
+                        client-id: springboot-oauth-spa
+                        client-secret: "sZVOH0FGz7niV28WGuAf9omKyCu4YnTY"
+                        scope: openid profile email
+                        redirect-uri: http://localhost:3000/callback
+                provider:
+                    keuycloak:
+                        issuer-uri: http://localhost:8080/realms/master
+    cloud:
+        gateway:
+            routes:
+                - id: resource
+                  uri: http://localhost:9000
+                  predicates:
+                    - Path=/resource
+                  filters:
+                    - TokenRelay=
+            # resourceserver:
+            #     jwt:
+            #         issuer-uri: http://localhost:8080/realms/master
