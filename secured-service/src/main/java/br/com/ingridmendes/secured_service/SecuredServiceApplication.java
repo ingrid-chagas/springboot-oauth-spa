@@ -16,6 +16,7 @@ public class SecuredServiceApplication {
 
 	@RestController
 	class ResourceController {
+		
 		@GetMapping("/resource")
 		public String getResource(@AuthenticationPrincipal Jwt jwt) {
 			var strBuilder = new StringBuilder();

@@ -20,19 +20,18 @@ public class GatewayApplication {
 		SpringApplication.run(GatewayApplication.class, args);
 	}
 
-}
-
-@RestController
-class ProfileController { 
-	@GetMapping("userinfo")
-	public Map<String, Object> userinfo(@AuthenticationPrincipal OidcUser oidcUser,  
-										@RegisteredOAuth2AuthorizedClient OAuth2AuthorizedClient authorizedClient) {
-		var attributesMap = new HashMap<>(oidcUser.getAttributes());
-		attributesMap.put("access_token", authorizedClient.getAccessToken().getTokenValue());
-		attributesMap.put("clientName", authorizedClient.getClientRegistration().getClientId());
-		attributesMap.put("userAttributes", oidcUser.getAttributes());
-		return attributesMap;
+	@RestController
+	class ProfileController {
+		
+		@GetMapping("/userinfo")
+		public Map<String, Object> userinfo(@AuthenticationPrincipal OidcUser oidcUser, 
+					@RegisteredOAuth2AuthorizedClient OAuth2AuthorizedClient authorizedClient) {
+			var attributes = new HashMap<>(oidcUser.getAttributes());
+			attributes.put("token", oidcUser.getIdToken().getTokenValue());
+			attributes.put("clientName", authorizedClient.getClientRegistration().getClientId());
+			attributes.put("userAttributes", oidcUser.getAttributes());
+			return attributes;
+		}
 	}
-
 
 }

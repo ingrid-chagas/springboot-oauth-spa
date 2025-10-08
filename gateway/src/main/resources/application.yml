@@ -10,21 +10,30 @@ spring:
                 registration:
                     keycloak:
                         client-id: springboot-oauth-spa
-                        client-secret: "sZVOH0FGz7niV28WGuAf9omKyCu4YnTY"
-                        scope: openid profile email
-                        redirect-uri: http://localhost:3000/callback
+                        client-secret: PtsNuHhlGtnNidxPRdLUPS9DN6tKYiTQ
+                        authorization-grant-type: authorization_code
+                        redirect-uri: http://localhost:8000/login/oauth2/code/keycloak
+                        scope: openid,profile
                 provider:
-                    keuycloak:
+                    keycloak:
                         issuer-uri: http://localhost:8080/realms/master
+                        # authorization-uri: http://localhost:8080/auth/realms/master/protocol/openid-connect/auth
+                        # token-uri: http://localhost:8080/auth/realms/master/protocol/openid-connect/token
+                        # user-info-uri: http://localhost:8080/auth/realms/master/protocol/openid-connect/userinfo
+                        # user-name-attribute: preferred_username
+
     cloud:
         gateway:
-            routes:
-                - id: resource
-                  uri: http://localhost:9000
-                  predicates:
-                    - Path=/resource
-                  filters:
-                    - TokenRelay=
+            server:
+                webflux:
+                    routes:
+                        - id: resource
+                          uri: http://localhost:9000
+                          predicates:
+                          - Path=/resource/**
+                          filters:
+                          - TokenRelay=
+                       
             # resourceserver:
             #     jwt:
             #         issuer-uri: http://localhost:8080/realms/master
